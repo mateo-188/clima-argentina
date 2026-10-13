@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MeteoArgentina | Clima en Vivo - Villa María, Córdoba</title>
+  
+  <!-- Tipografía Google Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Fondo con degradado ambiental y partículas sutiles -->
+  <div class="ambient-glow glow-top"></div>
+  <div class="ambient-glow glow-bottom"></div>
+
+  <!-- Encabezado Principal -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-cloud-sun-rain"></i>
+        </div>
+        <div>
+          <h1 class="brand-title">Meteo<span>Argentina</span></h1>
+          <p class="brand-subtitle">Red Meteorológica en Tiempo Real • Estación Villa María</p>
+        </div>
+      </div>
+      
+      <div class="header-status">
+        <div class="live-indicator">
+          <span class="pulsing-dot"></span>
+          <span>DATOS EN VIVO</span>
+        </div>
+        <div class="clock-display" id="reloj-hora">--:--:--</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- Barra de Selección Dinámica y Búsqueda -->
+    <section class="selectors-bar">
+      <div class="selectors-wrapper">
+        <div class="selector-group">
+          <label for="provincia-select"><i class="fa-solid fa-map-location-dot"></i> Provincia:</label>
+          <select id="provincia-select" class="custom-select">
+            <!-- Cargado dinámicamente con JavaScript -->
+          </select>
+        </div>
+
+        <div class="selector-group">
+          <label for="ciudad-select"><i class="fa-solid fa-city"></i> Ciudad / Localidad:</label>
+          <select id="ciudad-select" class="custom-select">
+            <!-- Opciones cargadas según la provincia -->
+          </select>
+        </div>
+
+        <div class="action-buttons">
+          <button id="btn-mi-ubicacion" class="btn btn-secondary" title="Detectar mi ubicación actual">
+            <i class="fa-solid fa-crosshairs"></i> Mi Ubicación
+          </button>
+          <button id="btn-actualizar" class="btn btn-primary" title="Refrescar datos del clima">
+            <i class="fa-solid fa-arrows-rotate"></i> Actualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- Accesos rápidos a ciudades destacadas -->
+      <div class="quick-chips">
+        <span class="quick-label">Acceso rápido:</span>
+        <button class="chip active" data-ciudad="Villa María" data-provincia="Córdoba">⭐ Villa María</button>
+        <button class="chip" data-ciudad="Córdoba Capital" data-provincia="Córdoba">Córdoba Cap.</button>
+        <button class="chip" data-ciudad="Ciudad de Buenos Aires" data-provincia="Ciudad Autónoma de Buenos Aires">CABA</button>
+        <button class="chip" data-ciudad="Rosario" data-provincia="Santa Fe">Rosario</button>
+        <button class="chip" data-ciudad="Mendoza Capital" data-provincia="Mendoza">Mendoza</button>
+        <button class="chip" data-ciudad="San Carlos de Bariloche" data-provincia="Río Negro">Bariloche</button>
+        <button class="chip" data-ciudad="Salta Capital" data-provincia="Salta">Salta</button>
+        <button class="chip" data-ciudad="Ushuaia" data-provincia="Tierra del Fuego">Ushuaia</button>
+      </div>
+    </section>
+
+    <!-- Estado de carga / Banner de error -->
+    <div id="loader" class="loader-container hidden">
+      <div class="spinner"></div>
+      <p>Consultando satélite y modelos numéricos en tiempo real...</p>
+    </div>
+
+    <!-- SECCIÓN 2: AVISOS Y ALERTAS METEOROLÓGICAS (Arriba para máxima visibilidad) -->
+    <section class="section-container" id="seccion-alertas">
+      <div class="section-header">
+        <h2><i class="fa-solid fa-triangle-exclamation"></i> Avisos / Alertas</h2>
+        <span class="section-tag" id="tag-alerta-estado">Verificando...</span>
+      </div>
+      
+      <!-- Contenedor dinámico del aviso -->
+      <div id="contenedor-aviso" class="alert-box-card">
+        <!-- Renderizado dinámico desde script.js -->
+      </div>
+    </section>
+
+    <!-- GRID PRINCIPAL: CLIMA ACTUAL / DÍA SELECCIONADO Y MAPA -->
+    <div class="weather-grid">
+      <!-- SECCIÓN 1: CLIMA ACTUAL / DÍA SELECCIONADO -->
+      <section class="section-container card-clima-actual" id="seccion-clima-actual">
+        <div class="section-header">
+          <h2>
+            <i class="fa-solid fa-temperature-half"></i> 
+            <span id="titulo-seccion-clima">Clima Actual</span>
+          </h2>
+          
+          <div class="header-right-actions">
+            <!-- Botón para regresar al tiempo actual si se inspecciona un día proyectado -->
+            <button id="btn-volver-hoy" class="btn-volver-hoy hidden" title="Volver al clima en vivo">
+              <i class="fa-solid fa-rotate-left"></i> Volver a tiempo actual
+            </button>
+            <span class="badge-tiempo-actual" id="label-hora-actualizacion">Actualizado: --:--</span>
+          </div>
+        </div>
+
+        <div class="current-weather-hero" id="weather-hero-card">
+          <div class="hero-left">
+            <div class="location-heading">
+              <h3 id="actual-nombre-ciudad">Villa María</h3>
+              <p id="actual-provincia-pais"><i class="fa-solid fa-location-dot"></i> Córdoba, Argentina</p>
+            </div>
+            
+            <div class="temp-display-wrap">
+              <span class="main-temperature" id="actual-temp">--</span>
+              <span class="temp-unit">°C</span>
+            </div>
+
+            <!-- Rango térmico cuando se selecciona un día proyectado -->
+            <div id="actual-temp-range" class="temp-range-badge hidden">
+              <span id="actual-temp-max" class="range-max"><i class="fa-solid fa-arrow-up"></i> Máx: --°</span>
+              <span class="range-sep">•</span>
+              <span id="actual-temp-min" class="range-min"><i class="fa-solid fa-arrow-down"></i> Mín: --°</span>
+            </div>
+
+            <div class="weather-condicion-badge">
+              <span class="weather-icon-large" id="actual-icono"><i class="fa-solid fa-sun"></i></span>
+              <span class="weather-desc-text" id="actual-descripcion">Cargando...</span>
+            </div>
+          </div>
+
+          <div class="hero-right">
+            <div class="sensacion-termica-box">
+              <span class="st-label" id="actual-st-label">Sensación Térmica</span>
+              <span class="st-value" id="actual-sensacion">-- °C</span>
+            </div>
+
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-icon"><i class="fa-solid fa-droplet"></i></div>
+                <div class="metric-info">
+                  <span class="metric-label" id="metric-label-humedad">Humedad</span>
+                  <span class="metric-val" id="actual-humedad">--%</span>
+                </div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-icon"><i class="fa-solid fa-wind"></i></div>
+                <div class="metric-info">
+                  <span class="metric-label" id="metric-label-viento">Viento</span>
+                  <span class="metric-val" id="actual-viento">-- km/h</span>
+                </div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-icon"><i class="fa-solid fa-cloud-showers-heavy"></i></div>
+                <div class="metric-info">
+                  <span class="metric-label" id="metric-label-precipitacion">Precipitación</span>
+                  <span class="metric-val" id="actual-precipitacion">0.0 mm</span>
+                </div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                <div class="metric-info">
+                  <span class="metric-label" id="metric-label-presion">Presión</span>
+                  <span class="metric-val" id="actual-presion">-- hPa</span>
+                </div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-icon"><i class="fa-solid fa-sun"></i></div>
+                <div class="metric-info">
+                  <span class="metric-label" id="metric-label-uv">Índice UV</span>
+                  <span class="metric-val" id="actual-uv">--</span>
+                </div>
+              </div>
+
+              <div class="metric-card">
+                <div class="metric-icon"><i class="fa-solid fa-compass"></i></div>
+                <div class="metric-info">
+                  <span class="metric-label">Coord. Exactas</span>
+                  <span class="metric-val" id="actual-coordenadas">-32.4075, -63.2455</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MAPA INTERACTIVO EN VIVO (OPENSTREETMAP / LEAFLET) -->
+      <section class="section-container card-mapa" id="seccion-mapa">
+        <div class="section-header">
+          <h2><i class="fa-solid fa-earth-americas"></i> Radar y Mapa en Vivo</h2>
+          <span class="map-hint"><i class="fa-solid fa-hand-pointer"></i> Hacé clic para consultar cualquier punto</span>
+        </div>
+        <div class="map-wrapper">
+          <div id="map"></div>
+          <div class="map-overlay-badge">
+            <span id="map-pin-city">Villa María</span> • <span id="map-pin-temp">--°C</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- SECCIÓN 3: PRONÓSTICO EXTENDIDO (7 DÍAS INTERACTIVOS) -->
+    <section class="section-container" id="seccion-pronostico">
+      <div class="section-header">
+        <h2><i class="fa-solid fa-calendar-week"></i> Pronóstico Extendido</h2>
+        <span class="section-subtitle">
+          <i class="fa-solid fa-hand-pointer"></i> Hacé clic en cualquier día para ver sus métricas detalladas arriba
+        </span>
+      </div>
+
+      <div class="forecast-cards-container" id="contenedor-pronostico-dias">
+        <!-- Tarjetas interactivas generadas dinámicamente desde script.js -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Pie de página -->
+  <footer class="app-footer">
+    <div class="footer-content">
+      <p><strong>MeteoArgentina</strong> • Aplicación meteorológica de alta precisión con Open-Meteo API y OpenStreetMap / Leaflet.</p>
+      <p class="footer-city">Estación focalizada en Villa María, Córdoba (-32.4075, -63.2455) con cobertura nacional interactiva.</p>
+    </div>
+  </footer>
+
+  <!-- Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Lógica de la aplicación -->
+  <script src="script.js"></script>
+</body>
+</html>

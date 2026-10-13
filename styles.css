@@ -1,0 +1,1052 @@
+/* ==========================================================================
+   METEOARGENTINA - ESTILOS MODERNOS (styles.css)
+   Focalizado en Villa María, Córdoba y Cobertura Nacional
+   ========================================================================== */
+
+:root {
+  /* Paleta de Colores Base */
+  --bg-primary: #0a0f1d;
+  --bg-secondary: #11182c;
+  --bg-card: rgba(18, 26, 47, 0.75);
+  --bg-card-hover: rgba(26, 38, 68, 0.85);
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-glass-bright: rgba(255, 255, 255, 0.16);
+  
+  /* Acentos de Color */
+  --accent-cyan: #00d2ff;
+  --accent-blue: #3a7bd5;
+  --accent-orange: #ff7e40;
+  --accent-red: #ff4757;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #8b5cf6;
+
+  /* Texto */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  /* Tipografía y Sombras */
+  --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  --shadow-glow-cyan: 0 0 25px rgba(0, 210, 255, 0.2);
+  --shadow-glow-amber: 0 0 25px rgba(245, 158, 11, 0.25);
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reset y Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Luces Ambientales de Fondo */
+.ambient-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+.glow-top {
+  width: 500px;
+  height: 500px;
+  top: -150px;
+  left: 20%;
+  background: radial-gradient(circle, var(--accent-blue) 0%, transparent 70%);
+}
+
+.glow-bottom {
+  width: 600px;
+  height: 600px;
+  bottom: -200px;
+  right: 10%;
+  background: radial-gradient(circle, #4f46e5 0%, transparent 70%);
+}
+
+/* ==========================================================================
+   ENCABEZADO (Header)
+   ========================================================================== */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(10, 15, 29, 0.82);
+  border-bottom: 1px solid var(--border-glass);
+  padding: 1rem 1.5rem;
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #fff;
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.brand-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.brand-title span {
+  background: linear-gradient(90deg, var(--accent-cyan), #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-emerald);
+}
+
+.pulsing-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent-emerald);
+  border-radius: 50%;
+  animation: pulse-dot 1.8s infinite;
+}
+
+@keyframes pulse-dot {
+  0% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.clock-display {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-glass);
+}
+
+/* ==========================================================================
+   CONTENEDOR PRINCIPAL Y SELECTORES
+   ========================================================================== */
+.main-content {
+  max-width: 1400px;
+  margin: 1.5rem auto 3rem;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.selectors-bar {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.selectors-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.selector-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.selector-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.selector-group label i {
+  color: var(--accent-cyan);
+}
+
+.custom-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(10, 15, 29, 0.85);
+  border: 1px solid var(--border-glass-bright);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  outline: none;
+}
+
+.custom-select:hover {
+  border-color: var(--accent-cyan);
+}
+
+.custom-select:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.2);
+}
+
+.custom-select option {
+  background-color: var(--bg-secondary);
+  color: var(--text-main);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn {
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  transition: var(--transition-fast);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-blue), #2563eb);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-main);
+  border: 1px solid var(--border-glass-bright);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--accent-cyan);
+}
+
+.quick-chips {
+  margin-top: 1.1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.quick-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.chip {
+  padding: 0.35rem 0.8rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.chip:hover {
+  background: rgba(0, 210, 255, 0.1);
+  color: var(--accent-cyan);
+  border-color: rgba(0, 210, 255, 0.3);
+}
+
+.chip.active {
+  background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(58, 123, 213, 0.25));
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   ESTADO DE CARGA (Loader)
+   ========================================================================== */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+  gap: 1rem;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-glass);
+}
+
+.loader-container.hidden {
+  display: none;
+}
+
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 4px solid rgba(0, 210, 255, 0.15);
+  border-top-color: var(--accent-cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   SECCIONES GENERALES (Section Card)
+   ========================================================================== */
+.section-container {
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-smooth);
+}
+
+.section-container:hover {
+  border-color: var(--border-glass-bright);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+}
+
+.section-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  letter-spacing: -0.3px;
+}
+
+.section-header h2 i {
+  color: var(--accent-cyan);
+}
+
+.section-tag, .section-subtitle, .badge-tiempo-actual, .map-hint {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.header-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn-volver-hoy {
+  background: rgba(0, 210, 255, 0.12);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0, 210, 255, 0.35);
+  padding: 0.38rem 0.85rem;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(0, 210, 255, 0.15);
+}
+
+.btn-volver-hoy:hover {
+  background: rgba(0, 210, 255, 0.25);
+  color: #fff;
+  border-color: var(--accent-cyan);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 210, 255, 0.3);
+}
+
+.btn-volver-hoy.hidden,
+.temp-range-badge.hidden {
+  display: none !important;
+}
+
+.temp-range-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-glass-bright);
+  padding: 0.25rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  width: fit-content;
+  margin-top: -0.2rem;
+}
+
+.temp-range-badge .range-max {
+  color: #f87171;
+}
+
+.temp-range-badge .range-min {
+  color: #60a5fa;
+}
+
+.temp-range-badge .range-sep {
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   SECCIÓN 2: AVISOS / ALERTAS METEOROLÓGICAS
+   ========================================================================== */
+.alert-box-card {
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Estilo cuando hay ALERTA DE LLUVIA > 50% */
+.alert-box-card.active-alert {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(239, 68, 68, 0.15));
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  box-shadow: var(--shadow-glow-amber);
+}
+
+.alert-box-card.active-alert .alert-header-title {
+  color: #fbbf24;
+}
+
+/* Estilo cuando está TRANQUILO (<= 50%) */
+.alert-box-card.active-calm {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(6, 182, 212, 0.08));
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.alert-box-card.active-calm .alert-header-title {
+  color: #34d399;
+}
+
+.alert-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.alert-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.alert-title-wrap i {
+  font-size: 1.5rem;
+}
+
+.alert-header-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.alert-badge-pill {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.alert-badge-warning {
+  background: rgba(245, 158, 11, 0.25);
+  color: #fef08a;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+}
+
+.alert-badge-tranquil {
+  background: rgba(16, 185, 129, 0.2);
+  color: #a7f3d0;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.alert-body-text {
+  font-size: 0.92rem;
+  color: #e2e8f0;
+  margin-bottom: 0.85rem;
+}
+
+.alert-days-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.alert-day-chip {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.alert-day-chip .prob-number {
+  color: #f87171;
+  font-weight: 800;
+}
+
+.alert-recommendation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  font-style: italic;
+}
+
+.alert-recommendation i {
+  color: #fbbf24;
+}
+
+/* ==========================================================================
+   GRID PRINCIPAL: CLIMA ACTUAL + MAPA
+   ========================================================================== */
+.weather-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 1.8rem;
+}
+
+/* SECCIÓN 1: CLIMA ACTUAL (Hero) */
+.current-weather-hero {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 1.5rem;
+  align-items: center;
+  transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1), transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.current-weather-hero.switching-day {
+  opacity: 0.35;
+  transform: translateY(4px);
+}
+
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.location-heading h3 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.location-heading p {
+  color: var(--accent-cyan);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.temp-display-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.3rem;
+  margin: 0.2rem 0;
+}
+
+.main-temperature {
+  font-size: 5.2rem;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -2px;
+  background: linear-gradient(180deg, #ffffff 40%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.temp-unit {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  margin-top: 0.4rem;
+}
+
+.weather-condicion-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass-bright);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.weather-icon-large {
+  font-size: 1.4rem;
+  color: #fbbf24;
+}
+
+.weather-desc-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Métricas del Clima Actual */
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sensacion-termica-box {
+  background: linear-gradient(135deg, rgba(58, 123, 213, 0.15), rgba(0, 210, 255, 0.05));
+  border: 1px solid rgba(0, 210, 255, 0.2);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.st-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.st-value {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--accent-cyan);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.metric-card {
+  background: rgba(10, 15, 29, 0.65);
+  border: 1px solid var(--border-glass);
+  padding: 0.85rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: var(--transition-fast);
+}
+
+.metric-card:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(0, 210, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.metric-icon {
+  font-size: 1.1rem;
+  color: var(--accent-cyan);
+}
+
+.metric-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metric-val {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* ==========================================================================
+   MAPA INTERACTIVO LEAFLET
+   ========================================================================== */
+.card-mapa {
+  display: flex;
+  flex-direction: column;
+}
+
+.map-wrapper {
+  position: relative;
+  flex: 1;
+  min-height: 380px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-glass);
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  background: #0f172a;
+}
+
+.map-overlay-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1000;
+  background: rgba(10, 15, 29, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-glass-bright);
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main);
+  box-shadow: var(--shadow-sm);
+  pointer-events: none;
+}
+
+.map-overlay-badge span:last-child {
+  color: var(--accent-cyan);
+}
+
+/* Personalización del Popup de Leaflet */
+.leaflet-popup-content-wrapper {
+  background: rgba(15, 23, 42, 0.95) !important;
+  color: #fff !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 210, 255, 0.3);
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+}
+
+.leaflet-popup-tip {
+  background: rgba(15, 23, 42, 0.95) !important;
+}
+
+.leaflet-popup-content {
+  font-family: var(--font-family) !important;
+  margin: 12px 14px !important;
+  font-size: 0.88rem !important;
+  line-height: 1.4 !important;
+}
+
+/* ==========================================================================
+   SECCIÓN 3: PRONÓSTICO EXTENDIDO (7 DÍAS)
+   ========================================================================== */
+.forecast-cards-container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.85rem;
+}
+
+.forecast-day-card {
+  background: rgba(10, 15, 29, 0.65);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  text-align: center;
+  transition: var(--transition-fast);
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.forecast-day-card:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(0, 210, 255, 0.4);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.forecast-day-card.selected-day {
+  border-color: var(--accent-cyan) !important;
+  background: linear-gradient(180deg, rgba(0, 210, 255, 0.18) 0%, rgba(10, 15, 29, 0.95) 100%) !important;
+  box-shadow: 0 0 22px rgba(0, 210, 255, 0.35), 0 8px 24px rgba(0, 0, 0, 0.45) !important;
+  transform: translateY(-3px);
+}
+
+.selected-indicator-pill {
+  position: absolute;
+  top: -9px;
+  background: linear-gradient(135deg, var(--accent-cyan), #38bdf8);
+  color: #0a0f1d;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(0, 210, 255, 0.5);
+  animation: pulse-badge 2s infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(0.96); }
+}
+
+.forecast-day-card.today {
+  border-color: rgba(0, 210, 255, 0.5);
+  background: linear-gradient(180deg, rgba(0, 210, 255, 0.08) 0%, rgba(10, 15, 29, 0.8) 100%);
+}
+
+.f-day-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.f-date-sub {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: -0.2rem;
+}
+
+.f-weather-icon {
+  font-size: 1.85rem;
+  margin: 0.3rem 0;
+  color: #fbbf24;
+}
+
+.f-weather-condition {
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  min-height: 2.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.f-thermal-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+}
+
+.f-temp-min {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #60a5fa;
+}
+
+.f-temp-max {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #f87171;
+}
+
+.f-rain-chance-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.2rem;
+}
+
+.f-rain-chance-badge.high-rain {
+  background: rgba(248, 113, 113, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(248, 113, 113, 0.4);
+}
+
+.f-rain-chance-badge.low-rain {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-dim);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ==========================================================================
+   PIE DE PÁGINA (Footer)
+   ========================================================================== */
+.app-footer {
+  border-top: 1px solid var(--border-glass);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  background: rgba(10, 15, 29, 0.9);
+  position: relative;
+  z-index: 10;
+}
+
+.footer-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.footer-city {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   RESPONSIVIDAD (Media Queries)
+   ========================================================================== */
+@media (max-width: 1100px) {
+  .weather-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .forecast-cards-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .selectors-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .action-buttons {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .action-buttons .btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .current-weather-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .forecast-cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .main-temperature {
+    font-size: 4rem;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .header-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .forecast-cards-container {
+    grid-template-columns: 1fr;
+  }
+}
+
